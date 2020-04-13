@@ -69,11 +69,13 @@ var GameState = {
         this.funText = this.game.add.text(185,20,'',style);
 
         this.refreshStats()
+
+
+        this.statsDecreaser = this.game.time.events.loop(Phaser.Timer.SECOND * 1,this.reduceProperties,this);
     },
 
     pickItem : function(sprite) {
         if (!this.uiBlocked) {
-            console.log('picked')
 
             this.clearSelection();
 
@@ -85,7 +87,6 @@ var GameState = {
 
     rotatePet: function(sprite) {
         if(!this.uiBlocked) {
-            console.log('rotating...')
 
             this.uiBlocked = true;
 
@@ -130,7 +131,7 @@ var GameState = {
         this.uiBlocked =true;
 
         var petMovement = this.game.add.tween(this.pet);
-        petMovement.to ({x: x,y: y},700);
+        petMovement.to ({x: x,y: y},200);
         petMovement.onComplete.add(function(){
 
         newItem.destroy();
@@ -142,7 +143,6 @@ var GameState = {
         var stat;
         for(stat in newItem.customParams){
             if(newItem.customParams.hasOwnProperty(stat)){
-                console.log(stat);
                 this.pet.customParams[stat] += newItem.customParams[stat];
             }
         }
@@ -158,7 +158,25 @@ var GameState = {
     refreshStats : function(){
         this.healthText.text = this.pet.customParams.health;
         this.funText.text = this.pet.customParams.fun;
+    },
+    reduceProperties :function(){
+        this.pet.customParams.health -= 10;
+        this.pet.customParams.fun -= 15;
+        this.refreshStats();
+    },
+    update : function(){
+        if (this.pet.customParams.health <= 0 || this.pet.customParams.fun <= 0){
+            this.pet.frame = 4;
+            this.uiBlocked = true;
+
+            this.game.time.events.add(2000,this.gameOver,this)
+        }
+    },
+    gameOver : function(){
+        this.game.state.restart();
     }
+
+    
 
 
     
