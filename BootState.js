@@ -1,13 +1,13 @@
 var BootState = {
     init: function(){
-        this.scale.scleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVerticaly = true;
     },
     preload: function(){
-        this.preload.image('preloadBar','bar.png');
-        this.preload.image('logo','logo.png');
+        this.load.image('preloadBar','bar.png');
+        this.load.image('logo','logo.png');
 
     },
     create: function(){
